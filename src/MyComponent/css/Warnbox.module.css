@@ -1,0 +1,12 @@
+.outerBox {
+  width: 100%;
+  opacity: 0;
+  animation-duration: 4s;
+  animation-name: warnbox;
+}
+
+@keyframes warnbox {
+  100% {
+    opacity: 1;
+  }
+}

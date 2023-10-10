@@ -1,0 +1,14 @@
+.create_account {
+  cursor: pointer;
+  color: blue;
+}
+.create_account:hover {
+  text-decoration: underline;
+  color: rgb(4, 4, 189);
+}
+.view_icon {
+  background-color: rgb(223, 223, 223);
+}
+.view_icon:active {
+  background-color: rgb(175, 175, 175);
+}
