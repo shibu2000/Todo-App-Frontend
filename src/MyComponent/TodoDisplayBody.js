@@ -12,8 +12,7 @@ export const TodoDisplayBody = (props) => {
   const keyid = useRef(0);
 
   const [todos, setTodos] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
-  const [executingMsg, setexecutingMsg] = useState("");
+
   const [isWarning, setisWarning] = useState(false);
   const [isWarningMsg, setisWarningMsg] = useState("");
   const [isView, setisView] = useState(false);
@@ -25,7 +24,9 @@ export const TodoDisplayBody = (props) => {
 
   useEffect(() => {
     axios
-      .post(`${process.env.REACT_APP_API_URL}/fetchtodo`, { userid: props.userid })
+      .post(`${process.env.REACT_APP_API_URL}/fetchtodo`, {
+        userid: props.userid,
+      })
       .then((res) => {
         if (res.data.length !== 0) {
           keyid.current = res.data[res.data.length - 1].id;
@@ -38,8 +39,8 @@ export const TodoDisplayBody = (props) => {
   }, [props.userid]);
 
   const onDelete = async (todo) => {
-    setexecutingMsg("");
-    setisLoading(true);
+    props.setexecutingMsg("");
+    props.setisLoading(true);
     await axios
       .delete(`${process.env.REACT_APP_API_URL}/delete/${todo.id}`)
       .then((res) => {
@@ -49,19 +50,19 @@ export const TodoDisplayBody = (props) => {
               return e !== todo;
             })
           );
-          setexecutingMsg("Successfully Deleted");
+          props.setexecutingMsg("Successfully Deleted");
         } else {
           alert("Server issue!!");
         }
         setTimeout(() => {
-          setisLoading(false);
+          props.setisLoading(false);
         }, 2000);
       })
       .catch((err) => {
         console.log(err);
         setisWarningMsg("Deletion Failed, Try Again!!");
         setisWarning(true);
-        setisLoading(false);
+        props.setisLoading(false);
       });
   };
 
@@ -77,13 +78,16 @@ export const TodoDisplayBody = (props) => {
   };
   return (
     <>
-      <Excecuting isLoading={isLoading} executingMsg={executingMsg} />
+      <Excecuting
+        isLoading={props.isLoading}
+        executingMsg={props.executingMsg}
+      />
       <ViewTodo
         setisView={setisView}
         isView={isView}
         viewTitleDesc={viewTitleDesc}
-        setisLoading={setisLoading}
-        setexecutingMsg={setexecutingMsg}
+        setisLoading={props.setisLoading}
+        setexecutingMsg={props.setexecutingMsg}
         setisWarning={setisWarning}
         setisWarningMsg={setisWarningMsg}
         todos={todos}
@@ -96,8 +100,8 @@ export const TodoDisplayBody = (props) => {
             <AddTodo
               userid={props.userid}
               addTodo={addTodo}
-              setisLoading={setisLoading}
-              setexecutingMsg={setexecutingMsg}
+              setisLoading={props.setisLoading}
+              setexecutingMsg={props.setexecutingMsg}
               setisWarning={setisWarning}
               setisWarningMsg={setisWarningMsg}
             />

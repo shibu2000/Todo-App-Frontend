@@ -3,13 +3,16 @@ import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import loginSignupCSS from "./css/LoginSignup.module.css";
 
-const Login = ({ setauthenticated, setuserDetails }) => {
+const Login = ({ setauthenticated, setuserDetails, setisLoading }) => {
   //=================For log into todo  list=================================
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  //=========================================================================
 
+  //state variable for toggeling password from hidden to show and vise-versa
   const [inputType, setinputType] = useState("password");
 
+  //state variable for changing the eye button from hidden to show and vise-versa
   const [isView, setisView] = useState(false);
 
   //When userclickes on login button loginUser() method will be invoked
@@ -18,6 +21,7 @@ const Login = ({ setauthenticated, setuserDetails }) => {
     if (!email || !password) {
       alert("Email and password field cant be blanked");
     } else {
+      setisLoading(true);
       await axios
         .post(`${process.env.REACT_APP_API_URL}/loginuser`, {
           email: email,
@@ -29,9 +33,11 @@ const Login = ({ setauthenticated, setuserDetails }) => {
             userName: result.data.name,
           });
           setauthenticated(true);
+          setisLoading(false);
         })
         .catch((err) => {
           console.log(err);
+          setisLoading(false);
           alert("Wrong email or password!! Try again");
         });
     }

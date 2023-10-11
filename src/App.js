@@ -16,11 +16,21 @@ function App() {
 
   const [authenticated, setauthenticated] = useState(null);
 
+  //state variable for loader
+  const [isLoading, setisLoading] = useState(false);
+
+  //state vatriable for displaying message while loader in true
+  const [executingMsg, setexecutingMsg] = useState("");
+
   if (authenticated === null || authenticated === false) {
     return (
       <LoginSignup
         setauthenticated={setauthenticated}
         setuserDetails={setuserDetails}
+        isLoading={isLoading}
+        executingMsg={executingMsg}
+        setisLoading={setisLoading}
+        setexecutingMsg={setexecutingMsg}
       />
     );
   }
@@ -35,7 +45,15 @@ function App() {
         {/* <Route path="/login" element={<LoginSignup setuserid={setuserid} />} /> */}
         <Route
           index
-          element={<TodoDisplayBody userid={userDetails.userId} />}
+          element={
+            <TodoDisplayBody
+              userid={userDetails.userId}
+              isLoading={isLoading}
+              executingMsg={executingMsg}
+              setisLoading={setisLoading}
+              setexecutingMsg={setexecutingMsg}
+            />
+          }
         />
         <Route path="/about" element={<About />} />
         <Route path="/notfound" element={<NotFound />} />

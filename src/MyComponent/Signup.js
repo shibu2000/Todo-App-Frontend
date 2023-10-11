@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 
-const Signup = ({ setisSignup }) => {
+const Signup = ({ setisSignup, setisLoading, setexecutingMsg }) => {
   //=================for creating account=================================
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
@@ -31,6 +31,9 @@ const Signup = ({ setisSignup }) => {
   //state variable for showing the success message after succefull creating account
   const [ifLoginSuccess, setifLoginSuccess] = useState(false);
 
+  //state variable for displaying message based on account creation and creation error
+  const [createAcErrMsg, setcreateAcErrMsg] = useState("");
+
   //Password validation regex
   const PASSWORD_REGEX = new RegExp(
     "^(?=.{8,})(?=.*[a-z])(?=.*[A-Z])(?=.*[^wd]).*$"
@@ -38,29 +41,38 @@ const Signup = ({ setisSignup }) => {
 
   const createAcount = (e) => {
     e.preventDefault();
+    setisLoading(true);
     axios
-      .post(
-        `https://todo-app-backend-production-f95f.up.railway.app/createaccount`,
-        {
-          name: fullName,
-          email: email,
-          password: password,
-        }
-      )
+      .post(`${process.env.REACT_APP_API_URL}/createaccount`, {
+        name: fullName,
+        email: email,
+        password: password,
+      })
       .then((result) => {
-        //success
-        let t = 5;
-        setifLoginSuccess(true);
-        let countInterval = setInterval(() => {
-          setloginCountDown(t--);
-          if (t < 0) {
-            clearInterval(countInterval);
-            setisSignup(true);
-          }
-        }, 1000);
+        if (result.data.statusCode === 409) {
+          setcreateAcErrMsg("Email already exist, try with different !!");
+          setifLoginSuccess(true);
+          setisLoading(false);
+        } else {
+          let t = 5;
+          setisLoading(false);
+          setcreateAcErrMsg("Signup Success, Redirected to Login Page");
+          setifLoginSuccess(true);
+          let countInterval = setInterval(() => {
+            setloginCountDown(t--);
+            if (t < 0) {
+              clearInterval(countInterval);
+              setisSignup(true);
+            }
+          }, 1000);
+        }
       })
       .catch((err) => {
-        console.log(err);
+        if (err) console.log(err);
+        setexecutingMsg(
+          "Error in account creation!! Try Again After Some Time"
+        );
+        setisLoading(false);
       });
   };
 
@@ -71,7 +83,7 @@ const Signup = ({ setisSignup }) => {
           ifLoginSuccess ? "" : "d-none"
         }`}
       >
-        Signup Success, Redirected to Login Page...{loginCountDown}
+        {createAcErrMsg}...{loginCountDown}
       </p>
       <Form.Group className={`mb-2`}>
         <Form.Label>

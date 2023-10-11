@@ -15,6 +15,7 @@ const Excecuting = (props) => {
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.6)",
+        zIndex: "999",
       }}
     >
       <div style={{ display: "inline-block" }}>

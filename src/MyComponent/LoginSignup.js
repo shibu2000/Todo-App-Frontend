@@ -2,8 +2,16 @@ import React, { useState } from "react";
 import loginCss from "./css/LoginSignup.module.css";
 import Login from "./Login";
 import Signup from "./Signup";
+import Excecuting from "./Excecuting";
 
-export const LoginSignup = ({ setauthenticated, setuserDetails }) => {
+export const LoginSignup = ({
+  setauthenticated,
+  setuserDetails,
+  isLoading,
+  executingMsg,
+  setisLoading,
+  setexecutingMsg,
+}) => {
   //state flag variable for switching login to create account and vice-versa
   const [isSignup, setisSignup] = useState(true);
 
@@ -17,6 +25,7 @@ export const LoginSignup = ({ setauthenticated, setuserDetails }) => {
         backgroundSize: "cover",
       }}
     >
+      <Excecuting isLoading={isLoading} executingMsg={executingMsg} />
       <div
         className="card"
         style={{
@@ -30,9 +39,14 @@ export const LoginSignup = ({ setauthenticated, setuserDetails }) => {
             <Login
               setauthenticated={setauthenticated}
               setuserDetails={setuserDetails}
+              setisLoading={setisLoading}
             />
           ) : (
-            <Signup setisSignup={setisSignup} />
+            <Signup
+              setisSignup={setisSignup}
+              setisLoading={setisLoading}
+              setexecutingMsg={setexecutingMsg}
+            />
           )}
           <div className="text-center">
             <p className="m-0  p-0">or</p>
