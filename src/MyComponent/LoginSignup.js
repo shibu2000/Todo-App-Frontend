@@ -51,12 +51,12 @@ export const LoginSignup = ({
           <div className="text-center">
             <p className="m-0  p-0">or</p>
             <span
-              className={`link-underline-success ${loginCss.create_account}`}
+              className={`link-underline ${loginCss.create_account}`}
               onClick={() => {
                 isSignup ? setisSignup(false) : setisSignup(true);
               }}
             >
-              {isSignup ? "Login" : "Create Account"}
+              {!isSignup ? "Login" : "Create Account"}
             </span>
           </div>
         </div>
